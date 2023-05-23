@@ -18,8 +18,18 @@ export class JobCreateInput {
   nature: JobNatureEnum;
   @Field()
   salary: string;
+  @Field()
+  experience: string;
+  @Field()
+  education: string;
+  @Field({ nullable: true })
+  externalLink: string;
+  @Field({ nullable: true })
+  expiryDate: Date;
   @Field(() => [String], { nullable: true })
   responsibilities?: string[];
+  @Field(() => [String], { nullable: true })
+  tags?: string[];
   @Field({ nullable: true })
   categoryId: string;
 }

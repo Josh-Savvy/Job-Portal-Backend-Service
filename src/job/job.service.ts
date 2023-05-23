@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserService } from 'src/user/user.service';
 import { JobCreateInput } from './dto/create-job.input';
 import { JobType } from './job.type';
-import { generateSlug } from 'common/utils';
+import { generateSlug, isValidUUID } from 'common/utils';
 import { AccountType } from 'src/user/enums';
 import { Industry } from 'src/user/entities/industry.entity';
 import { IndustryType } from 'src/user/types/industry.type';
@@ -46,7 +46,6 @@ export class JobService {
         ),
       },
     });
-
     if (jobSlugExists)
       throw new HttpException(
         'A Job posting from your company with the same title already exists.',
@@ -81,19 +80,41 @@ export class JobService {
     );
     const isActive = user.accountType === AccountType.ADMIN;
     newJobPosting.active = isActive;
-    await this.industryRepo.save(category);
-    await this.jobRepository.save(newJobPosting);
+    console.log({ newJob: newJobPosting });
+
+    // await this.industryRepo.save(category);
+    // await this.jobRepository.save(newJobPosting);
     return `${
       !isActive ? `Dear ${user.name},` : ''
     } This job opening has been ${
       isActive ? `created by Admin - ${user.name}` : 'submitted for approval'
     }`;
   }
-  async getJobBySlug(slug: string): Promise<JobType> {
-    return await this.jobRepository.findOne({
-      where: { slug },
+  async getJobById(id: string): Promise<JobType> {
+    const jobById = await this.jobRepository.findOne({
+      where: { id },
       relations: ['category', 'category.jobs'],
     });
+    if (!jobById) {
+      throw new HttpException(
+        "Job with this credential doesn't exist",
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return jobById;
+  }
+  async getJobBySlug(id: string): Promise<JobType> {
+    const jobBySlug = await this.jobRepository.findOne({
+      where: { slug: id },
+      relations: ['category', 'category.jobs'],
+    });
+    if (!jobBySlug) {
+      throw new HttpException(
+        "Job with this credential doesn't exist",
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return jobBySlug;
   }
   async getAllJobsByCategory(slug: string): Promise<JobType[]> {
     const jobs = await this.industryRepo.findOne({
@@ -114,8 +135,9 @@ export class JobService {
     return await this.industryRepo.find({ relations: ['jobs'] });
   }
 
-  async getAllJobsForAdmin(): Promise<JobType[]> {
+  async getAllJobsForAdmin(user: UserType): Promise<JobType[]> {
     return await this.jobRepository.find({
+      where: { createdBy: user.email },
       relations: ['applicants', 'category'],
     });
   }

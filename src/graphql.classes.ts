@@ -10,6 +10,7 @@
 
 export enum JobNatureEnum {
     REMOTE = "REMOTE",
+    HYBRID = "HYBRID",
     ONSITE = "ONSITE"
 }
 
@@ -17,6 +18,11 @@ export enum AccountType {
     FREELANCER = "FREELANCER",
     EMPLOYER = "EMPLOYER",
     ADMIN = "ADMIN"
+}
+
+export enum RegAccountType {
+    FREELANCER = "FREELANCER",
+    EMPLOYER = "EMPLOYER"
 }
 
 export class JobInputType {
@@ -65,6 +71,7 @@ export class UserInputType {
     email: string;
     username: string;
     adminUsername: string;
+    profileViews?: Nullable<string>;
     accountType?: Nullable<AccountType>;
     category?: Nullable<IndustryInputType>;
     notifications?: Nullable<NotificationInputType[]>;
@@ -79,7 +86,7 @@ export class CreateUserInput {
     name: string;
     email: string;
     password: string;
-    accountType: AccountType;
+    accountType: RegAccountType;
     categoryId: string;
 }
 
@@ -91,7 +98,12 @@ export class JobCreateInput {
     company: string;
     nature: JobNatureEnum;
     salary: string;
+    experience: string;
+    education: string;
+    externalLink?: Nullable<string>;
+    expiryDate?: Nullable<DateTime>;
     responsibilities?: Nullable<string[]>;
+    tags?: Nullable<string[]>;
     categoryId?: Nullable<string>;
 }
 
@@ -141,6 +153,7 @@ export class UserType {
     email: string;
     username: string;
     adminUsername: string;
+    profileViews?: Nullable<string>;
     accountType?: Nullable<AccountType>;
     category?: Nullable<IndustryType>;
     notifications?: Nullable<NotificationType[]>;
@@ -170,6 +183,8 @@ export abstract class IQuery {
 
     abstract getAllJobs(): JobType[] | Promise<JobType[]>;
 
+    abstract getJobById(jobId: string): JobType | Promise<JobType>;
+
     abstract getAllJobsByCategory(slug: string): JobType[] | Promise<JobType[]>;
 
     abstract getAllJobsForAdmin(): JobType[] | Promise<JobType[]>;
@@ -184,9 +199,9 @@ export abstract class IMutation {
 
     abstract createJob(jobCreateInput: JobCreateInput): string | Promise<string>;
 
-    abstract applyForJob(userId: string, jobId: string): string | Promise<string>;
+    abstract applyForJob(jobId: string): string | Promise<string>;
 
-    abstract saveJob(userId: string, jobId: string): string | Promise<string>;
+    abstract saveJob(jobId: string): string | Promise<string>;
 
     abstract closeJobOpening(jobId: string): string | Promise<string>;
 }

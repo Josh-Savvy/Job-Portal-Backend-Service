@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
 import { UserType } from './types/user.type';
 import { createHash, generateSlug } from 'common/utils';
-import { AccountType } from './enums';
+import { AccountType, RegAccountType } from './enums';
 import { Industry } from './entities/industry.entity';
 import { IndustryType } from './types/industry.type';
 
@@ -20,7 +20,7 @@ export class UserService {
   async findOne(email: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: { email },
-      relations: ['notifications', 'savedJobs', 'appliedJobs'],
+      relations: ['notifications', 'savedJobs', 'appliedJobs', 'category'],
     });
     if (!user)
       throw new HttpException(
@@ -33,7 +33,7 @@ export class UserService {
     const data = await this.userRepository.find({
       //   take: limit,
       //   skip,
-      relations: ['notifications', 'savedJobs', 'appliedJobs'],
+      relations: ['notifications', 'savedJobs', 'appliedJobs', 'category'],
     });
     return data;
   }
@@ -56,7 +56,7 @@ export class UserService {
   async findById(id: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: { id },
-      relations: ['notifications', 'savedJobs', 'appliedJobs'],
+      relations: ['notifications', 'savedJobs', 'appliedJobs', 'category'],
     });
     if (!user) throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
     return user;
@@ -81,6 +81,7 @@ export class UserService {
   async create(createUserInput: CreateUserInput) {
     const user = await this.userRepository.findOne({
       where: { email: createUserInput.email },
+      relations: ['category'],
     });
     if (user)
       throw new HttpException(
@@ -95,18 +96,20 @@ export class UserService {
     newUser.name = createUserInput.name;
     const category = await this.industryRepository.findOne({
       where: { id: createUserInput.categoryId },
+      relations: ['users'],
     });
     if (!category)
       throw new HttpException("Category doesn't exist.", HttpStatus.NOT_FOUND);
     newUser.category = category;
     category.users.push(newUser);
-    if (createUserInput.accountType === AccountType.EMPLOYER) {
+    if (createUserInput.accountType === RegAccountType.EMPLOYER) {
       newUser.accountType = AccountType.EMPLOYER;
       return await this.userRepository.save(newUser);
-    } else if (createUserInput.accountType === AccountType.ADMIN) {
-      newUser.accountType = AccountType.ADMIN;
-      return await this.userRepository.save(newUser);
     }
+    // else if (createUserInput.accountType === AccountType.ADMIN) {
+    //   newUser.accountType = AccountType.ADMIN;
+    //   return await this.userRepository.save(newUser);
+    // }
     return await this.userRepository.save(newUser);
   }
 

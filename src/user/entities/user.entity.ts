@@ -27,6 +27,8 @@ export class User {
   email: string;
   @Column()
   password: string;
+  @Column({ nullable: true })
+  profileViews: string;
   @Column({
     type: 'enum',
     enum: AccountType,

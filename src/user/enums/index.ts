@@ -5,5 +5,10 @@ export enum AccountType {
   EMPLOYER = 'Employer',
   ADMIN = 'Admin',
 }
+export enum RegAccountType {
+  FREELANCER = 'Freelancer',
+  EMPLOYER = 'Employer',
+}
 
 registerEnumType(AccountType, { name: 'AccountType' });
+registerEnumType(RegAccountType, { name: 'RegAccountType' });

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriverConfig, ApolloDriver } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -12,6 +12,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { appConfig, dbConfig } from '../config';
 import { JobModule } from './job/job.module';
 import { Job } from './job/entities/job.entity';
+import { APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -51,8 +52,15 @@ import { Job } from './job/entities/job.entity';
         outputAs: 'class',
       },
     }),
+    //
     UserModule,
     JobModule,
+  ],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
+    },
   ],
 })
 export class AppModule {}
