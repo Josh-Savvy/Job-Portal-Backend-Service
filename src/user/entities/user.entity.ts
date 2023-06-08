@@ -28,7 +28,19 @@ export class User {
   @Column()
   password: string;
   @Column({ nullable: true })
-  profileViews: string;
+  profileImg?: string;
+  @Column({ nullable: true })
+  experience?: string;
+  @Column({ nullable: true })
+  education?: string;
+  @Column({ nullable: true })
+  profileViews?: string;
+  @Column({ nullable: true })
+  DOB?: Date;
+  @Column({ nullable: true })
+  jobTitle?: string;
+  @Column({ nullable: true })
+  personalWebsite?: string;
   @Column({
     type: 'enum',
     enum: AccountType,

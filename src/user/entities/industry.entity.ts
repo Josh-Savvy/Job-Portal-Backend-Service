@@ -23,7 +23,7 @@ export class Industry {
   @OneToMany(() => User, (user) => user.category)
   @JoinTable()
   users?: User[];
-  @OneToMany(() => Job, (user) => user.category)
+  @OneToMany(() => Job, (job) => job.category)
   @JoinTable()
   jobs?: Job[];
   @CreateDateColumn({ nullable: true })

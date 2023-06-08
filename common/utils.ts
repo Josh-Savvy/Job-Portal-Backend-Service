@@ -21,7 +21,7 @@ export const compareHash = (
   if (!isValue) {
     throw new HttpException(
       'Invalid credentials provided',
-      HttpStatus.BAD_REQUEST,
+      HttpStatus.NOT_ACCEPTABLE,
     );
   }
   return isValue;

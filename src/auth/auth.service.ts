@@ -28,6 +28,7 @@ export class AuthService {
   }
   async login(user: UserType): Promise<{
     accessToken: string | null;
+    refreshToken: string | null;
   }> {
     const { email } = user;
     const jwtPayload = { email: email, sub: user.id };
@@ -36,6 +37,7 @@ export class AuthService {
         secret: `${process.env.JWT_ENCRYPTION_KEY}`,
         expiresIn: '3600s',
       }),
+      refreshToken: '',
     };
   }
 }

@@ -24,12 +24,12 @@ export class AuthResolver {
     if (!user) {
       throw new HttpException('USER_NOT_FOUND', HttpStatus.NOT_FOUND);
     }
-    const { accessToken } = await this.authService.login(user);
+    const { accessToken, refreshToken } = await this.authService.login(user);
     context.res.cookie('accessToken', accessToken, {
       httpOnly: true,
       // secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
     });
-    return { accessToken };
+    return { accessToken, refreshToken };
   }
 }

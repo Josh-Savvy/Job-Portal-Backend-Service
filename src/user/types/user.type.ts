@@ -18,7 +18,19 @@ export class UserType {
   @Field()
   adminUsername?: string;
   @Field({ nullable: true })
-  profileViews: string;
+  profileViews?: string;
+  @Field({ nullable: true })
+  jobTitle?: string;
+  @Field({ nullable: true })
+  personalWebsite?: string;
+  @Field({ nullable: true })
+  profileImg?: string;
+  @Field({ nullable: true })
+  experience?: string;
+  @Field({ nullable: true })
+  education?: string;
+  @Field({ nullable: true })
+  DOB?: Date;
   @HideField()
   password: string;
   @Field(() => AccountType, {

@@ -56,11 +56,5 @@ import { APP_PIPE } from '@nestjs/core';
     UserModule,
     JobModule,
   ],
-  providers: [
-    {
-      provide: APP_PIPE,
-      useClass: ValidationPipe,
-    },
-  ],
 })
 export class AppModule {}

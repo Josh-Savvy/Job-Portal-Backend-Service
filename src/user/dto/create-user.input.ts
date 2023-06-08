@@ -21,11 +21,15 @@ export class CreateUserInput {
   @Field()
   @IsNotEmpty({ message: 'Password is required' })
   @Length(6, 100, { message: 'Password must not be less than 6 digits' })
-  @IsStrongPassword({}, { message: 'Password is not strong enough' })
+  // @IsStrongPassword(
+  //   { minLength: 6 },
+  //   { message: 'Password is not strong enough' },
+  // )
   password: string;
   @Field(() => RegAccountType, {
     defaultValue: RegAccountType.FREELANCER,
   })
+  @IsNotEmpty({ message: 'Select an account type' })
   accountType?: RegAccountType;
   @Field()
   @IsNotEmpty({ message: 'Please select one category' })

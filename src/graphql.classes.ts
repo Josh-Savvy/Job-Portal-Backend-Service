@@ -72,6 +72,12 @@ export class UserInputType {
     username: string;
     adminUsername: string;
     profileViews?: Nullable<string>;
+    jobTitle?: Nullable<string>;
+    personalWebsite?: Nullable<string>;
+    profileImg?: Nullable<string>;
+    experience?: Nullable<string>;
+    education?: Nullable<string>;
+    DOB?: Nullable<DateTime>;
     accountType?: Nullable<AccountType>;
     category?: Nullable<IndustryInputType>;
     notifications?: Nullable<NotificationInputType[]>;
@@ -154,6 +160,12 @@ export class UserType {
     username: string;
     adminUsername: string;
     profileViews?: Nullable<string>;
+    jobTitle?: Nullable<string>;
+    personalWebsite?: Nullable<string>;
+    profileImg?: Nullable<string>;
+    experience?: Nullable<string>;
+    education?: Nullable<string>;
+    DOB?: Nullable<DateTime>;
     accountType?: Nullable<AccountType>;
     category?: Nullable<IndustryType>;
     notifications?: Nullable<NotificationType[]>;
@@ -166,6 +178,7 @@ export class UserType {
 
 export class LoginResponse {
     accessToken: string;
+    refreshToken: string;
 }
 
 export abstract class IQuery {

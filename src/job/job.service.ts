@@ -80,16 +80,15 @@ export class JobService {
     );
     const isActive = user.accountType === AccountType.ADMIN;
     newJobPosting.active = isActive;
-    console.log({ newJob: newJobPosting });
-
-    // await this.industryRepo.save(category);
-    // await this.jobRepository.save(newJobPosting);
+    await this.industryRepo.save(category);
+    await this.jobRepository.save(newJobPosting);
     return `${
       !isActive ? `Dear ${user.name},` : ''
     } This job opening has been ${
       isActive ? `created by Admin - ${user.name}` : 'submitted for approval'
     }`;
   }
+
   async getJobById(id: string): Promise<JobType> {
     const jobById = await this.jobRepository.findOne({
       where: { id },
